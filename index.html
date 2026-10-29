@@ -35,16 +35,20 @@
             justify-content: space-between;
             overflow-x: hidden;
         }
-
-         / 마우스 올리면 한 번 부드럽게 올라갔다 내려오는 애니메이션
+        
+        /* 매거진 표지 부드러운 바운스 애니메이션 */
         @keyframes bounceUpDown {
             0% { transform: translateY(0); }
-            50% { transform: translateY(-15px); } / 위로 15px 스윽 올라감/
-            100% { transform: translateY(0); }    / 다시 제자리로 안착 /
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
         }
-
+        
+        .cover-wrapper {
+            transition: transform 0.3s ease; /* 혹시 모를 뚝 끊김 방지용 */
+        }
+        
         .cover-wrapper:hover {
-            animation: bounceUpDown 0.6s ease-in-out; / 0.6초 동안 부드럽게 1회 작동 /
+            animation: bounceUpDown 0.6s ease-in-out;
         }
 
         /* Header Navigation */
@@ -59,11 +63,11 @@
             z-index: 50;
         }
 
-        /메인로고/  
+        /*메인로고*/  
         .header-logo {
             display: flex;
             align-items: center;
-            min-height: 57px;
+            min-height: 50px;
             text-decoration: none;
             color: #ffffff;
             font-weight: 800;
@@ -284,9 +288,9 @@
             justify-content: center;
             gap: 12px;
         }
-         /하단 협회로고/
+         /*하단 협회로고*/
         .footer-logo {
-            height: 51px;
+            height: 45px;
             width: auto;
             object-fit: contain;
             opacity: 0.85;
