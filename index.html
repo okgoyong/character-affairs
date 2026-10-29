@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHARACTER AFFAIRS - 캐릭터 어패어스</title>
+    <!-- Pretendard Font -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1c1c1e;
+            --accent-blue: #007aff;
+            --text-main: #ffffff;
+            --text-sub: #8e8e93;
+            --border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        header {
+            width: 100%;
+            padding: 24px 40px;
+            min-height: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 50;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            min-height: 38px;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .header-logo img {
+            height: 38px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .header-nav a {
+            color: #d1d1d6;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            transition: color 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: #ffffff;
+        }
+
+        /* Swiper Section */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px 0;
+        }
+
+        .swiper-container-wrapper {
+            width: 100%;
+            max-width: 960px; /* 화면에 최대 3개까지만 보이도록 폭 제한 */
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .swiper {
+            width: 100%;
+            padding-top: 24px;
+            padding-bottom: 30px;
+            overflow: visible;
+        }
+
+        /* Swiper 자체 3D 트랜스폼과 충돌하지 않도록 transition 제거 */
+        .swiper-slide {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+        }
+
+        /* Cover Card */
+        .cover-wrapper {
+            width: 320px;
+            height: 460px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1e1e1e;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 4px 12px rgba(0, 0, 0, 0.4);
+            display: block;
+            text-decoration: none;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, filter 0.3s ease;
+        }
+
+        /* 양옆 슬라이드 자연스러운 음영 */
+        .swiper-slide:not(.swiper-slide-active) .cover-wrapper {
+            filter: brightness(0.68) contrast(0.95);
+        }
+
+        .swiper-slide-active .cover-wrapper:hover {
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.85), 0 6px 18px rgba(0, 0, 0, 0.55);
+        }
+
+        .cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Coming Soon Fallback */
+        .coming-soon-cover {
+            width: 100%;
+            height: 100%;
+            background: #18181a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+        }
+
+        .coming-soon-cover img {
+            width: 80%;
+            max-width: 220px;
+            height: auto;
+            opacity: 0.3;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Issue Information Text */
+        .issue-info {
+            margin-top: 18px;
+            text-align: center;
+            min-height: 52px;
+        }
+
+        .issue-date {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+
+        .issue-desc {
+            font-size: 0.88rem;
+            font-weight: 400;
+            color: var(--text-sub);
+            margin-top: 4px;
+            min-height: 18px;
+        }
+
+        /* Controls Layout */
+        .controls-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            user-select: none;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: #d1d1d6;
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn.arrow-btn {
+            width: 38px;
+            padding: 0;
+            font-size: 1.1rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Pagination Dots */
+        .swiper-pagination {
+            position: static !important;
+            width: auto !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 6px;
+        }
+
+        .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.35);
+            opacity: 1;
+            margin: 0 !important;
+            transition: all 0.25s ease;
+            border-radius: 50%;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--accent-blue);
+            width: 22px;
+            border-radius: 6px;
+        }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            min-height: 94px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            height: 34px;
+            width: auto;
+            object-fit: contain;
+            opacity: 0.85;
+            transition: opacity 0.2s ease;
+        }
+
+        .footer-logo:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .header-logo img {
+                height: 30px;
+            }
+
+            .header-nav {
+                gap: 18px;
+            }
+
+            .header-nav a {
+                font-size: 0.88rem;
+            }
+
+            .swiper-container-wrapper {
+                max-width: 100%;
+            }
+
+            .swiper-slide {
+                width: 260px;
+            }
+
+            .cover-wrapper {
+                width: 260px;
+                height: 374px;
+            }
+
+            .issue-date {
+                font-size: 1.05rem;
+            }
+
+            .controls-wrapper {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                height: 34px;
+                padding: 0 10px;
+                font-size: 0.8rem;
+            }
+
+            .nav-btn.arrow-btn {
+                width: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <a href="./index.html" class="header-logo" title="CHARACTER AFFAIRS">
+            <img src="./assets/CHARACTER-AFFAIRS-bi.png" alt="CHARACTER AFFAIRS" onerror="this.onerror=null; this.src='./CHARACTER-AFFAIRS-bi.png';">
+        </a>
+        <nav class="header-nav">
+            <a href="https://www.kocda.org/" target="_blank" rel="noopener noreferrer">캐릭터디자이너협회</a>
+            <a href="https://www.kocda.org/%EB%B3%B5%EC%A0%9C-%EA%B4%91%EA%B3%A0%EB%AC%B8%EC%9D%98-1" target="_blank" rel="noopener noreferrer">크루(기자)모집</a>
+        </nav>
+    </header>
+
+    <!-- Main Carousel -->
+    <main>
+        <div class="swiper-container-wrapper">
+            <div class="swiper mainSwiper">
+                <div class="swiper-wrapper">
+
+                    <!-- 1. 2026.11 창간호 -->
+                    <div class="swiper-slide">
+                        <a href="./vol2611/open.html" target="_blank" class="cover-wrapper" title="2026년 11월 창간호 보기">
+                            <img src="./assets/2611.jpg" alt="2026.11월호 창간호" class="cover-img" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="coming-soon-cover" style="display: none;">
+                                <img src="./assets/CHARACTER-AFFAIRS-bi_2.png" alt="CHARACTER AFFAIRS" onerror="this.onerror=null; this.src='./CHARACTER-AFFAIRS-bi_2.png';">
+                            </div>
+                        </a>
+                        <div class="issue-info">
+                            <p class="issue-date">2026.11월호</p>
+                            <p class="issue-desc">창간호</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. 2026.12 발간예정 -->
+                    <div class="swiper-slide">
+                        <a href="./vol2612/open.html" target="_blank" class="cover-wrapper" data-upcoming="true" title="2026년 12월호 발간예정">
+                            <img src="./assets/2612.jpg" alt="2026.12월호" class="cover-img" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="coming-soon-cover" style="display: none;">
+                                <img src="./assets/CHARACTER-AFFAIRS-bi_2.png" alt="CHARACTER AFFAIRS" onerror="this.onerror=null; this.src='./CHARACTER-AFFAIRS-bi_2.png';">
+                            </div>
+                        </a>
+                        <div class="issue-info">
+                            <p class="issue-date">2026.12월호</p>
+                            <p class="issue-desc">발간예정</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. 2027.01 발간예정 -->
+                    <div class="swiper-slide">
+                        <a href="./vol2701/open.html" target="_blank" class="cover-wrapper" data-upcoming="true" title="2027년 01월호 발간예정">
+                            <img src="./assets/2701.jpg" alt="2027.01월호" class="cover-img" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="coming-soon-cover" style="display: none;">
+                                <img src="./assets/CHARACTER-AFFAIRS-bi_2.png" alt="CHARACTER AFFAIRS" onerror="this.onerror=null; this.src='./CHARACTER-AFFAIRS-bi_2.png';">
+                            </div>
+                        </a>
+                        <div class="issue-info">
+                            <p class="issue-date">2027.01월호</p>
+                            <p class="issue-desc">발간예정</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls: First / Prev / Pagination / Next / Last -->
+        <div class="controls-wrapper">
+            <button type="button" class="nav-btn" id="btnFirst">« 처음</button>
+            <button type="button" class="nav-btn arrow-btn" id="btnPrev">&lt;</button>
+            <div class="swiper-pagination"></div>
+            <button type="button" class="nav-btn arrow-btn" id="btnNext">&gt;</button>
+            <button type="button" class="nav-btn" id="btnLast">끝 »</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <a href="https://www.kocda.org/" target="_blank" rel="noopener noreferrer">
+            <img src="./assets/222.avif" alt="(사)한국캐릭터디자이너협회" class="footer-logo" onerror="this.onerror=null; this.src='./222.avif';">
+        </a>
+    </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper(".mainSwiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            coverflowEffect: {
+                rotate: 28,
+                stretch: 0,
+                depth: 260,
+                modifier: 1,
+                slideShadows: false
+            },
+            initialSlide: 0,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+
+        // 양옆 슬라이드 클릭 시 새 창이 뜨지 않고 가운데로 이동하도록 처리
+        document.querySelectorAll(".swiper-slide").forEach((slide, index) => {
+            const link = slide.querySelector(".cover-wrapper");
+            if (!link) return;
+            link.addEventListener("click", function(e) {
+                if (swiper.activeIndex !== index) {
+                    e.preventDefault();
+                    swiper.slideTo(index);
+                } else if (link.getAttribute("data-upcoming") === "true") {
+                    // 아직 폴더가 없는 발간예정 호수는 클릭 시 빈 에러 창이 뜨지 않도록 방지
+                    const img = link.querySelector(".cover-img");
+                    if (!img || img.style.display === "none") {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+
+        // Navigation button events
+        document.getElementById("btnPrev").addEventListener("click", () => {
+            swiper.slidePrev();
+        });
+
+        document.getElementById("btnNext").addEventListener("click", () => {
+            swiper.slideNext();
+        });
+
+        document.getElementById("btnFirst").addEventListener("click", () => {
+            swiper.slideTo(0);
+        });
+
+        document.getElementById("btnLast").addEventListener("click", () => {
+            swiper.slideTo(swiper.slides.length - 1);
+        });
+    </script>
+</body>
+</html>
