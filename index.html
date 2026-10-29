@@ -36,6 +36,14 @@
             overflow-x: hidden;
         }
 
+         .cover-wrapper {
+            transition: transform 0.3s ease; /* 부드럽게 움직이는 속도 설정 */
+        }
+
+        .cover-wrapper:hover {
+            transform: translateY(-10px); /* 마우스를 올렸을 때 위로 10px 이동 */
+        }
+
         /* Header Navigation */
         header {
             width: 100%;
