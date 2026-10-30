@@ -47,7 +47,7 @@
             transition: transform 0.3s ease; /* 혹시 모를 뚝 끊김 방지용 */
         }
         
-        .cover-wrapper:hover {
+        .cover-wrapper.play-bounce {
             animation: bounceUpDown 0.6s ease-in-out;
         }
 
@@ -492,6 +492,17 @@
         document.getElementById("btnLast").addEventListener("click", () => {
             swiper.slideTo(swiper.slides.length - 1);
         });
+
+        // 마우스가 빠져도 바운스 애니메이션이 끝까지 재생되도록 제어
+        document.querySelectorAll('.cover-wrapper').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.classList.add('play-bounce'); // 마우스 닿으면 애니메이션 시작
+            });
+            item.addEventListener('animationend', function() {
+                this.classList.remove('play-bounce'); // 애니메이션이 완전히 끝나면 상태 초기화
+            });
+        });
+
     </script>
 </body>
 </html>
