@@ -25,8 +25,12 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background-color: var(--bg-color);
+body {
+            /* 선명하고 시원한 로열 블루 스포트라이트 배경 */
+            background-color: #0b111e;
+            background-image: 
+                radial-gradient(circle at 50% 45%, #1e4b85 0%, #102a52 35%, #081224 75%, #050b14 100%);
+            background-attachment: fixed;
             color: var(--text-main);
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             min-height: 100vh;
@@ -35,7 +39,7 @@
             justify-content: space-between;
             overflow-x: hidden;
         }
-        
+
         /* 매거진 표지 부드러운 바운스 애니메이션 */
         @keyframes bounceUpDown {
             0% { transform: translateY(0); }
@@ -101,7 +105,7 @@
             color: #ffffff;
         }
 
-        /* Swiper Section */
+/* Swiper Section */
         main {
             flex: 1;
             display: flex;
@@ -110,14 +114,17 @@
             align-items: center;
             width: 100%;
             padding: 20px 0;
+            overflow: hidden;
         }
 
         .swiper-container-wrapper {
             width: 100%;
-            max-width: 960px; /* 화면에 최대 3개까지만 보이도록 폭 제한 */
+            max-width: 1400px; /* 양옆 책들이 온전히 보이도록 시원하게 확장 */
             margin: 0 auto;
             position: relative;
-            overflow: hidden;
+            /* 좌우 끝으로 갈수록 부드럽게 흐려져 사라지는 그라데이션 마스크 */
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
         }
 
         .swiper {
@@ -127,7 +134,6 @@
             overflow: visible;
         }
 
-        /* Swiper 자체 3D 트랜스폼과 충돌하지 않도록 transition 제거 */
         .swiper-slide {
             width: 320px;
             display: flex;
@@ -137,28 +143,41 @@
         }
 
         /* Cover Card */
-        .cover-wrapper {
-            width: 320px;
-            height: 460px;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #1e1e1e;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 4px 12px rgba(0, 0, 0, 0.4);
-            display: block;
-            text-decoration: none;
-            cursor: pointer;
-            transition: box-shadow 0.3s ease, filter 0.3s ease;
-        }
+/* Swiper Slide 가속 및 기본 전환 */
+.cover-wrapper {
+    width: 320px;
+    height: 460px;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1e1e1e;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    will-change: transform, opacity, filter; /* GPU 렌더링 최적화 */
+    transform: translateZ(0);               /* 하드웨어 가속 레이어 분리 */
+    transition: box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+}
 
-        /* 양옆 슬라이드 자연스러운 음영 */
-        .swiper-slide:not(.swiper-slide-active) .cover-wrapper {
-            filter: brightness(0.68) contrast(0.95);
-        }
+/* 1. 활성 메인 표지 */
+.swiper-slide-active .cover-wrapper {
+    filter: brightness(1) contrast(1);
+    opacity: 1;
+}
 
-        .swiper-slide-active .cover-wrapper:hover {
-            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.85), 0 6px 18px rgba(0, 0, 0, 0.55);
-        }
+/* 2. 메인 바로 옆(2번째) 책 */
+.swiper-slide:not(.swiper-slide-active) .cover-wrapper {
+    filter: brightness(0.65) contrast(0.95);
+    opacity: 1;
+}
+
+/* 3. 3번째 이상 바깥쪽 책 (투명도 및 블러 심도 처리) */
+.swiper-slide-next + .swiper-slide .cover-wrapper,
+.swiper-slide:has(+ .swiper-slide-prev) .cover-wrapper {
+    filter: brightness(0.4) blur(3.5px) !important;
+    opacity: 0.5 !important;
+}
 
         .cover-img {
             width: 100%;
@@ -353,6 +372,7 @@
                 width: 34px;
             }
         }
+
 /* 메인 팝업 배너 스타일 */
         .popup-modal-overlay {
             position: fixed;

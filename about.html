@@ -23,14 +23,19 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background-color: var(--bg-color);
+body {
+            /* 선명하고 시원한 로열 블루 스포트라이트 배경 */
+            background-color: #0b111e;
+            background-image: 
+                radial-gradient(circle at 50% 45%, #1e4b85 0%, #102a52 35%, #081224 75%, #050b14 100%);
+            background-attachment: fixed;
             color: var(--text-main);
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow-x: hidden;
         }
 
         /* Header Navigation */
