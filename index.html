@@ -35,6 +35,21 @@
             justify-content: space-between;
             overflow-x: hidden;
         }
+        
+        /* 매거진 표지 부드러운 바운스 애니메이션 */
+        @keyframes bounceUpDown {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .cover-wrapper {
+            transition: transform 0.3s ease; /* 혹시 모를 뚝 끊김 방지용 */
+        }
+        
+        .cover-wrapper.play-bounce {
+            animation: bounceUpDown 0.6s ease-in-out;
+        }
 
         /* Header Navigation */
         header {
@@ -48,10 +63,11 @@
             z-index: 50;
         }
 
+        /*메인로고*/  
         .header-logo {
             display: flex;
             align-items: center;
-            min-height: 38px;
+            min-height: 50px;
             text-decoration: none;
             color: #ffffff;
             font-weight: 800;
@@ -60,7 +76,7 @@
         }
 
         .header-logo img {
-            height: 38px;
+            height: 57px;
             width: auto;
             display: block;
             object-fit: contain;
@@ -272,9 +288,10 @@
             justify-content: center;
             gap: 12px;
         }
-
+         /*하단 협회로고*/
         .footer-logo {
-            height: 34px;
+            display: none; /* 하단 로고 숨김 처리 */
+            height: 45px;
             width: auto;
             object-fit: contain;
             opacity: 0.85;
@@ -346,8 +363,13 @@
             <img src="./assets/CHARACTER-AFFAIRS-bi.png" alt="CHARACTER AFFAIRS" onerror="this.onerror=null; this.src='./CHARACTER-AFFAIRS-bi.png';">
         </a>
         <nav class="header-nav">
+<!-- 소식 클릭 시 about.html 로 바로 이동 -->
+            <a href="./about.html">캐릭터 어페어스 소식</a>
             <a href="https://www.kocda.org/" target="_blank" rel="noopener noreferrer">캐릭터디자이너협회</a>
             <a href="https://www.kocda.org/%EB%B3%B5%EC%A0%9C-%EA%B4%91%EA%B3%A0%EB%AC%B8%EC%9D%98-1" target="_blank" rel="noopener noreferrer">크루(기자)모집</a>
+        <!-- 👇 추가된 기사 투고 제안 메뉴 (구글 폼 URL 삽입) 👇 -->
+        <!-- <a href="여기에_구글폼_공유_주소_입력" target="_blank" rel="noopener noreferrer">기사 투고/제안</a>-->
+          <a href="javascript:void(0);" onclick="alert('기사 투고/제안 시스템 준비 중입니다. 곧 찾아뵙겠습니다.');">기사 투고 제안</a> 
         </nav>
     </header>
 
@@ -359,8 +381,8 @@
 
                     <!-- 1. 2026.11 창간호 -->
                     <div class="swiper-slide">
-                        <a href="./vol2611/open.html" target="_blank" class="cover-wrapper" title="2026년 11월 창간호 보기">
-                            <img src="./assets/2611.jpg" alt="2026.11월호 창간호" class="cover-img" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <a href="./caf202611/open.html" target="_blank" class="cover-wrapper" title="2026년 11월 창간호 보기">
+                            <img src="./caf202611/shot.png" alt="2026.11월호 창간호" class="cover-img" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="coming-soon-cover" style="display: none;">
                                 <img src="./assets/CHARACTER-AFFAIRS-bi_2.png" alt="CHARACTER AFFAIRS" onerror="this.onerror=null; this.src='./CHARACTER-AFFAIRS-bi_2.png';">
                             </div>
@@ -476,6 +498,17 @@
         document.getElementById("btnLast").addEventListener("click", () => {
             swiper.slideTo(swiper.slides.length - 1);
         });
+
+        // 마우스가 빠져도 바운스 애니메이션이 끝까지 재생되도록 제어
+        document.querySelectorAll('.cover-wrapper').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.classList.add('play-bounce'); // 마우스 닿으면 애니메이션 시작
+            });
+            item.addEventListener('animationend', function() {
+                this.classList.remove('play-bounce'); // 애니메이션이 완전히 끝나면 상태 초기화
+            });
+        });
+
     </script>
 </body>
 </html>
