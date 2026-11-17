@@ -705,7 +705,7 @@ body {
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
+   <script>
         const swiper = new Swiper(".mainSwiper", {
             effect: "coverflow",
             grabCursor: true,
@@ -734,7 +734,6 @@ body {
                     e.preventDefault();
                     swiper.slideTo(index);
                 } else if (link.getAttribute("data-upcoming") === "true") {
-                    // 아직 폴더가 없는 발간예정 호수는 클릭 시 빈 에러 창이 뜨지 않도록 방지
                     const img = link.querySelector(".cover-img");
                     if (!img || img.style.display === "none") {
                         e.preventDefault();
@@ -744,56 +743,20 @@ body {
         });
 
         // Navigation button events
-        document.getElementById("btnPrev").addEventListener("click", () => {
-            swiper.slidePrev();
-        });
-
-        document.getElementById("btnNext").addEventListener("click", () => {
-            swiper.slideNext();
-        });
-
-        document.getElementById("btnFirst").addEventListener("click", () => {
-            swiper.slideTo(0);
-        });
-
-        document.getElementById("btnLast").addEventListener("click", () => {
-            swiper.slideTo(swiper.slides.length - 1);
-        });
+        document.getElementById("btnPrev").addEventListener("click", () => { swiper.slidePrev(); });
+        document.getElementById("btnNext").addEventListener("click", () => { swiper.slideNext(); });
+        document.getElementById("btnFirst").addEventListener("click", () => { swiper.slideTo(0); });
+        document.getElementById("btnLast").addEventListener("click", () => { swiper.slideTo(swiper.slides.length - 1); });
 
         // 마우스가 빠져도 바운스 애니메이션이 끝까지 재생되도록 제어
         document.querySelectorAll('.cover-wrapper').forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.classList.add('play-bounce'); // 마우스 닿으면 애니메이션 시작
-            });
-            item.addEventListener('animationend', function() {
-                this.classList.remove('play-bounce'); // 애니메이션이 완전히 끝나면 상태 초기화
-            });
+            item.addEventListener('mouseenter', function() { this.classList.add('play-bounce'); });
+            item.addEventListener('animationend', function() { this.classList.remove('play-bounce'); });
         });
 
-// 메인 팝업 노출 및 닫기 제어
-        (function() {
-            const popup = document.getElementById('mainPopupModal');
-            const hideUntil = localStorage.getItem('hideMainBannerUntil');
-            const now = new Date().getTime();
-
-            if (!hideUntil || now > parseInt(hideUntil, 10)) {
-                popup.style.display = 'flex';
-            }
-        })();
-
-        function closeMainPopup() {
-            const popup = document.getElementById('mainPopupModal');
-            const chkToday = document.getElementById('chkDoNotShowToday');
-
-            if (chkToday && chkToday.checked) {
-                const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
-                localStorage.setItem('hideMainBannerUntil', expireTime.toString());
-            }
-
-            popup.style.display = 'none';
-        }
-
-// 팝업 노출 통합 제어 (스텝 1 -> 2 -> 3 -> 완료 후 메인 광고 팝업 노출)
+        // ==========================================
+        // 🚨 튜토리얼 ➔ 메인 팝업 순차적 노출 로직 🚨
+        // ==========================================
         document.addEventListener('DOMContentLoaded', function() {
             const tutorialOverlay = document.getElementById('tutorialOverlay');
             const step1 = document.getElementById('tutorialStep1');
@@ -804,25 +767,26 @@ body {
             // 튜토리얼 완료 기록 체크
             const hideTutorial = localStorage.getItem('hideTutorialForever');
             
-            // 광고 팝업 오늘 안 보기 기록 체크
-            const hideMainBannerUntil = localStorage.getItem('hideMainBannerUntil');
-            const now = new Date().getTime();
-            const showAdPopup = !hideMainBannerUntil || now > parseInt(hideMainBannerUntil, 10);
+            // 메인 팝업 노출 조건을 검사하고 띄우는 함수
+            function checkAndShowMainPopup() {
+                const hideMainBannerUntil = localStorage.getItem('hideMainBannerUntil');
+                const now = new Date().getTime();
+                if (!hideMainBannerUntil || now > parseInt(hideMainBannerUntil, 10)) {
+                    if (mainPopup) mainPopup.style.display = 'flex';
+                }
+            }
 
             if (!hideTutorial) {
                 // 처음 방문자: 튜토리얼 시작
-                tutorialOverlay.style.display = 'block';
+                if (tutorialOverlay) tutorialOverlay.style.display = 'block';
                 let currentStep = 1;
 
-                // 화면 터치/클릭 시 다음 스텝으로 넘어감
                 tutorialOverlay.addEventListener('click', function() {
                     if (currentStep === 1) {
-                        // 1 -> 2 단계
                         step1.style.display = 'none';
                         step2.style.display = 'flex';
                         currentStep = 2;
                     } else if (currentStep === 2) {
-                        // 2 -> 3 단계
                         step2.style.display = 'none';
                         step3.style.display = 'flex';
                         currentStep = 3;
@@ -831,35 +795,40 @@ body {
                         tutorialOverlay.style.display = 'none';
                         localStorage.setItem('hideTutorialForever', 'true');
                         
-                        // 튜토리얼 끝난 후 기존 광고 팝업 띄우기
-                        if (showAdPopup) {
-                            mainPopup.style.display = 'flex';
-                        }
+                        // 튜토리얼 종료 직후 메인 팝업 띄우기
+                        checkAndShowMainPopup();
                     }
                 });
-            } else if (showAdPopup) {
-                // 이미 튜토리얼을 본 사람은 원래 팝업만 띄움
-                mainPopup.style.display = 'flex';
+            } else {
+                // 이미 튜토리얼을 본 사람은 접속하자마자 메인 팝업 조건 검사
+                checkAndShowMainPopup();
             }
         });
 
-// [개발자 전용 테스트 단축키] Ctrl + Q 누르면 튜토리얼 기록 초기화
+        // [개발자 전용 테스트 단축키] Ctrl + Q 누르면 튜토리얼 & 광고 기록 동시 초기화
         document.addEventListener('keydown', function(e) {
-            // Ctrl 키와 Q 키(대소문자 무관)가 동시에 눌렸는지 확인
             if (e.ctrlKey && (e.key === 'q' || e.key === 'Q')) {
-                e.preventDefault(); // 혹시 모를 브라우저 기본 단축키 충돌 방지
-                
-                // 튜토리얼 시청 기록 삭제
+                e.preventDefault(); 
                 localStorage.removeItem('hideTutorialForever');
+                localStorage.removeItem('hideMainBannerUntil'); 
                 
-                // (선택) 메인 광고 팝업 기록도 같이 지우고 싶다면 아래 줄의 맨 앞 '//'를 지우세요
-                // localStorage.removeItem('hideMainBannerUntil'); 
-                
-                alert('튜토리얼 시청 기록이 초기화되었습니다.\n페이지를 다시 불러옵니다.');
-                window.location.reload(); // 즉시 새로고침
+                alert('튜토리얼과 메인 팝업 시청 기록이 모두 초기화되었습니다.\n페이지를 다시 불러옵니다.');
+                window.location.reload(); 
             }
         });
 
+        // 메인 광고 팝업 닫기 함수
+        function closeMainPopup() {
+            const popup = document.getElementById('mainPopupModal');
+            const chkToday = document.getElementById('chkDoNotShowToday');
+
+            if (chkToday && chkToday.checked) {
+                const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+                localStorage.setItem('hideMainBannerUntil', expireTime.toString());
+            }
+
+            if (popup) popup.style.display = 'none';
+        }
     </script>
 </body>
 </html>
