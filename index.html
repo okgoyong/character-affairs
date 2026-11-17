@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -545,7 +545,7 @@ body {
 
         /* 스텝 3: 하단 컨트롤 안내 (버튼 아래에서 위를 가리키게 배치) */
         .bottom-msg {
-            bottom: 13%; /* 기존 3%에서 화살표 버튼 쪽으로 더 올림 */
+            bottom: 13%; 
             left: 50%;
             animation: floatBottom 1.5s ease-in-out infinite;
         }
@@ -558,7 +558,7 @@ body {
         /* 터치 유도 깜빡임 텍스트 */
         .tap-to-continue {
             position: absolute;
-            top: 70%;
+            top: 10%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: rgba(255,255,255,0.7);
@@ -584,20 +584,20 @@ body {
 
         <!-- 스텝 1: 스와이프 안내 -->
         <div id="tutorialStep1" class="tutorial-msg swipe-msg">
-            <div class="text">원하는 <strong>매거진</strong>을 좌우로 터치로 골라 선택하세요</div>
+            <div class="text">원하는 매거진을 좌우 스와이프로 고를 수 있어요.</div>
             <div class="icon swipe-icon">👆</div>
         </div>
         
         <!-- 스텝 2: 책 클릭 안내 (처음엔 숨김) -->
         <div id="tutorialStep2" class="tutorial-msg click-msg" style="display: none;">
             <div class="icon">👆</div>
-            <div class="text">클릭(터치)하여 매거진을 펼쳐볼 수 있습니다.</div>
+            <div class="text">클릭(터치)하여 매거진을 펼쳐볼 수 있어요.</div>
         </div>
 
         <!-- 스텝 3: 하단 화살표 안내 (처음엔 숨김) -->
         <div id="tutorialStep3" class="tutorial-msg bottom-msg" style="display: none;">
             <div class="icon">👆</div>
-            <div class="text"><strong>화살표</strong>로 매거진을 고를 수 있어요</div>
+            <div class="text">화살표로도 매거진을 고를 수 있어요</div>
         </div>
         
     </div>
