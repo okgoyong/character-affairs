@@ -37,37 +37,6 @@
 	var sendvisitinfo = function(type,page){};
 	
 </script>
-<!-- 👇 안내 팝업 스타일 추가 👇 -->
-<style>
-    .flip-guide-toast {
-        position: fixed;
-        top: 100px; /* 보라색 상단 바 아래 여백 */
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7);
-        color: #ffffff;
-        padding: 10px 24px;
-        border-radius: 30px;
-        font-size: 15px;
-        font-weight: bold;
-        letter-spacing: -0.5px;
-        z-index: 999999; /* 플립북 화면 제일 위로 띄우기 */
-        pointer-events: none; /* 안내문이 떠있어도 클릭/터치 방해 안 함 */
-        backdrop-filter: blur(4px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        
-        /* 5초 대기 후 1.5초 동안 서서히 투명해지며 사라짐 */
-        animation: fadeOutToast 1.5s ease forwards;
-        animation-delay: 5s; 
-    }
-
-    @keyframes fadeOutToast {
-        0% { opacity: 1; visibility: visible; }
-        100% { opacity: 0; visibility: hidden; }
-    }
-</style>
-<!-- 👆 스타일 추가 끝 👆 -->
-</head> <!-- 기존에 있던 헤드 닫기 태그 -->
 </head>	
 <body>
 	<script type="text/javascript" src="javascript/search_config.js"></script><script type="text/javascript" src="javascript/bookmark_config.js"></script>
@@ -78,13 +47,5 @@
 
 <script type="text/javascript"></script>
 <noscript><div><hr/><ul><li><a href="files/basic-html/index.html">Pages</a></li></ul><hr style="width:80%"/></div></noscript>
-<body>
-<!-- 👇 팝업 문구 HTML 추가 👇 -->
-<div class="flip-guide-toast">
-    👉 좌우 화살표를 클릭하거나 책장을 터치로 넘겨주세요
-</div>
-<!-- 👆 팝업 문구 추가 끝 👆 -->
-
-	<script type="text/javascript" src="javascript/search_config.js"></script>
 </body>
 </html>
